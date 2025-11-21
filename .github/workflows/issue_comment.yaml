@@ -3,6 +3,11 @@ name: Create a comment on new issues
 on:
   issues:
     types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
   comment-with-action:
     runs-on: ubuntu-latest
@@ -10,10 +15,11 @@ jobs:
       - name: "dump github context"
         run: echo '${{ toJSON(github.event) }}' | jq
         shell: bash
+
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v5
         with:
-          issue-number: 1
+          issue-number: ${{ github.event.issue.number }}
           body: |
             This is a multi-line test comment
             - With GitHub **Markdown** :sparkles:
